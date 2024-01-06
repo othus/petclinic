@@ -5,7 +5,7 @@ pipeline {
         NEXUS_PASSWORD = credentials('nexus-password')
         NEXUS_REPO = credentials('nexus-repo-url')
     }
-    //stages {
+    stages {
       //  stage('Code Analysis') {
         //    steps {
           //      withSonarQubeEnv('sonarqube') {
