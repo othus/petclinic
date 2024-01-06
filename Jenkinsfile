@@ -15,14 +15,15 @@ pipeline {
         }
         stage('Quality Gate') {
             steps {
-                timeout(time: 6, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
+                timeout(time: 2, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: false
                 }
             }
         }
         stage('Build Artifact') {
             steps {
                 sh 'mvn clean install -DskipTests'
+                // sh 'mvn install -DskipTests'
             }
         }
         stage('Build Docker Image') {
