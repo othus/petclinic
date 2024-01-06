@@ -28,7 +28,7 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $NEXUS_REPO/myapp:latest .'
+                sh 'docker build -t myapp:latest $NEXUS_REPO .'
             }
         }
         stage('Nexus Login') {
