@@ -28,13 +28,13 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t myapp:1 .'
+                sh 'docker build -t myapp:latest .'
             }
         }
         stage('Nexus Login') {
             steps{
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'nexus-apssword', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASSWORD')]) {
+                    withCredentials([usernamePassword(credentialsId: 'nexus-password', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASSWORD')]) {
                         sh 'echo \$NEXUS_PASSWORD | docker login --username \$NEXUS_USER --password-stdin \$NEXUS_REPO'
                     }
                 }
