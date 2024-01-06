@@ -29,7 +29,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t myapp:1 .'
-                sh 'docker tag myapp:1 $NEXUS_REPO/myapp:latest'
+                sh "docker tag myapp:1 $NEXUS_REPO/myapp:latest"
             }
         }
         stage('Nexus Login') {
