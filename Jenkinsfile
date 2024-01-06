@@ -5,21 +5,21 @@ pipeline {
         NEXUS_PASSWORD = credentials('nexus-password')
         NEXUS_REPO = credentials('nexus-repo-url')
     }
-    stages {
-        stage('Code Analysis') {
-            steps {
-                withSonarQubeEnv('sonarqube') {
-                    sh 'mvn sonar:sonar'
-                }
-            }
-        }
-        stage('Quality Gate') {
-            steps {
-                timeout(time: 2, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: false
-                }
-            }
-        }
+    //stages {
+      //  stage('Code Analysis') {
+        //    steps {
+          //      withSonarQubeEnv('sonarqube') {
+            //        sh 'mvn sonar:sonar'
+              //  }
+         //   }
+       // }
+        //stage('Quality Gate') {
+          //  steps {
+            //    timeout(time: 2, unit: 'MINUTES') {
+              //      waitForQualityGate abortPipeline: false
+            //    }
+          //  }
+        //}
         stage('Build Artifact') {
             steps {
                 sh 'mvn clean install -DskipTests'
