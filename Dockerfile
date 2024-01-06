@@ -4,7 +4,7 @@ FROM tomcat
 COPY **/*.war /usr/local/tomcat/webapps
 WORKDIR /usr/local/tomcat/webapps
 RUN apt update -y && apt install curl -y
-RUN curl -o https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip && \
+RUN curl -O https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip && \
     apt-get install unzip -y && \
     unzip newrelic-java.zip -d /usr/local/tomcat/webapps
 ENV JAVA_OPTS="$JAVA_OPTS -javaagent:app/newrelic.jar"
