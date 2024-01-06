@@ -2,8 +2,8 @@ pipeline {
     agent any
     environment {
         NEXUS_USER = credentials('nexus-username')
-        NEXUS_PASSWORD = credentials('nexus')
-        NEXUS_REPO = credentials('nexus-repo-url-prvt')
+        NEXUS_PASSWORD = credentials('nexus-password')
+        NEXUS_REPO = credentials('nexus-repo-url')
     }
     stages {
         stage('Code Analysis') {
@@ -30,11 +30,15 @@ pipeline {
                 sh 'docker build -t $NEXUS_REPO/myapp:latest .'
             }
         }
-        stage('Log into Nexus Repo') {
-            steps {
-                sh 'docker login --username $NEXUS_USER --password $NEXUS_PASSWORD $NEXUS_REPO'
+        stage('Nexus Login') {
+            steps{
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'nexus-apssword', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASSWORD')]) {
+                        sh 'echo \$NEXUS_PASSWORD | docker login --username \$NEXUS_USER --password-stdin \$NEXUS_REPO'
+                    }
+                }
             }
-        }
+        }    
         stage('Push to Nexus Repo') {
             steps {
                 sh 'docker push $NEXUS_REPO/myapp:latest'
