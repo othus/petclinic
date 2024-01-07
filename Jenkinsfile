@@ -6,20 +6,20 @@ pipeline {
         NEXUS_REPO = credentials('nexus-repo-url')
     }
     stages {
-      //  stage('Code Analysis') {
-        //    steps {
-          //      withSonarQubeEnv('sonarqube') {
-            //        sh 'mvn sonar:sonar'
-              //  }
-         //   }
-       // }
-        //stage('Quality Gate') {
-          //  steps {
-            //    timeout(time: 2, unit: 'MINUTES') {
-              //      waitForQualityGate abortPipeline: false
-            //    }
-          //  }
-        //}
+        stage('Code Analysis') {
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                    sh 'mvn sonar:sonar'
+                }
+            }
+        }
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 10, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
         stage('Build Artifact') {
             steps {
                 //sh 'mvn clean install -DskipTests'
@@ -44,7 +44,7 @@ pipeline {
         stage('Push to Nexus Repo') {
             steps {
                 //sh 'docker push $NEXUS_REPO/myapp:latest'
-                sh 'docker push http://18.234.161.174:8085/myapp:latest'
+                sh 'docker push 44.212.5.145/:8085/myapp:latest'
             }
         }
         stage('Deploy to stage') {
