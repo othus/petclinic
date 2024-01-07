@@ -1,8 +1,6 @@
 pipeline {
     agent any
     environment {
-        NEXUS_USER = credentials('nexus-username')
-        NEXUS_PASSWORD = credentials('nexus-password')
         NEXUS_REPO = credentials('nexus-repo-url')
     }
     stages {
@@ -15,7 +13,7 @@ pipeline {
         }
         stage('Quality Gate') {
             steps {
-                timeout(time: 10, unit: 'MINUTES') {
+                timeout(time: 4, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
                 }
             }
@@ -43,8 +41,8 @@ pipeline {
         }    
         stage('Push to Nexus Repo') {
             steps {
-                //sh 'docker push $NEXUS_REPO/myapp:latest'
-                sh 'docker push 44.212.5.145/:8085/myapp:latest'
+                sh 'docker push $NEXUS_REPO/myapp:latest'
+                //sh 'docker push 44.212.5.145/:8085/myapp:latest'
             }
         }
         stage('Deploy to stage') {
