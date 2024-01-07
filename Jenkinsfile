@@ -36,20 +36,20 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'nexus-user-password', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
                         sh 'echo $PASSWORD | docker login --username $USER --password-stdin $NEXUS_REPO'
-                        sh 'docker push $NEXUS_REPO/myapp:latest'
+                        //sh 'docker push $NEXUS_REPO/myapp:latest'
                     }
                 }
             }
         }    
-        //stage('Push to Nexus Repo') {
-          //  steps {
-            //    sh 'docker push $NEXUS_REPO/repository/docker-image-repo/myapp:latest'
-          //  }
-        //}
+        stage('Push to Nexus Repo') {
+            steps {
+                sh 'docker push $NEXUS_REPO/myapp:latest'
+            }
+        }
         stage('Deploy to stage') {
             steps {
                 sshagent(['ansible-key']) {
-                    sh 'ssh -t -t ec2-user@10.0.1.139 -o strictHostKeyChecking=no "cd /etc/ansible && ansible-playbook -i /etc/ansible/stage-hosts stage-env-playbook.yml"'
+                    sh 'ssh -t -t ec2-user@10.0.1.237 -o strictHostKeyChecking=no "cd /etc/ansible && ansible-playbook -i /etc/ansible/stage-hosts stage-env-playbook.yml"'
                 }
             }
         }
@@ -71,7 +71,7 @@ pipeline {
         stage('Deploy to prod') {
             steps {
                 sshagent(['ansible-key']) {
-                    sh 'ssh -t -t ec2-user@10.0.1.139 -o strictHostKeyChecking=no "cd /etc/ansible && ansible-playbook -i /etc/ansible/prod-hosts prod-env-playbook.yml"'
+                    sh 'ssh -t -t ec2-user@10.0.1.237 -o strictHostKeyChecking=no "cd /etc/ansible && ansible-playbook -i /etc/ansible/prod-hosts prod-env-playbook.yml"'
                 }
             }
         }
