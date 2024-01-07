@@ -1,6 +1,8 @@
 pipeline {
     agent any
     environment {
+        NEXUS_USER = credentials('nexus-user')
+        NEXUS_PASSWORD = credentials('nexus-password')
         NEXUS_REPO = credentials('nexus-repo-url')
     }
     stages {
@@ -29,18 +31,23 @@ pipeline {
                 sh 'docker build -t myapp:latest .'
             }
         }
-        stage('Nexus Login') {
-            steps{
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'nexus-user-password', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
-                        sh 'echo $PASSWORD | docker login --username $USER --password-stdin http://$NEXUS_REPO'
-                        //sh 'docker push $NEXUS_REPO/myapp:latest'
-                    }
-                }
-            }
-        }    
-        stage('Push to Nexus Repo') {
+        //stage('Nexus Login') {
+          //  steps{
+            //    script {
+              //      withCredentials([usernamePassword(credentialsId: 'nexus-user-password', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
+                //        sh 'echo $PASSWORD | docker login --username $USER --password-stdin http://$NEXUS_REPO'
+              //      }
+            //    }
+          //  }
+        //} 
+        stage('Log into Nexus Repo') {
             steps {
+                sh 'docker login --username $NEXUS_USER --password $NEXUS_PASSWORD $NEXUS_REPO'
+            }
+        }
+        stage('Tag and Push to Nexus Repo') {
+            steps {
+                sh 'docker tag myapp:latest $NEXUS_REPO/myapp:latest'
                 sh 'docker push $NEXUS_REPO/myapp:latest'
                 //sh 'docker push 44.212.5.145/:8085/myapp:latest'
             }
