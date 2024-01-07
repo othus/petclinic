@@ -43,7 +43,8 @@ pipeline {
         }    
         stage('Push to Nexus Repo') {
             steps {
-                sh 'docker push $NEXUS_REPO/myapp:latest'
+                //sh 'docker push $NEXUS_REPO/myapp:latest'
+                sh 'docker push http://18.234.161.174:8085/myapp:latest'
             }
         }
         stage('Deploy to stage') {
