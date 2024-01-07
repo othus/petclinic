@@ -22,8 +22,8 @@ pipeline {
         //}
         stage('Build Artifact') {
             steps {
-                sh 'mvn clean install -DskipTests'
-                // sh 'mvn install -DskipTests'
+                //sh 'mvn clean install -DskipTests'
+                sh 'mvn install -DskipTests'
             }
         }
         stage('Build Docker Image') {
